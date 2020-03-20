@@ -12,8 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Titulo {
@@ -22,12 +25,13 @@ public class Titulo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long codigo;
 	
-	@NotNull(message = "Descrição obrigatória!")
+	@NotEmpty(message = "Descrição obrigatória!")
 	@Size(max = 60, message = "A descrição não pode ter mais que 60 caracteres")
 	private String descricao;
 	
 	@NotNull(message = "Data obrigatória")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dataVencimento;
 	
 	@NotNull(message = "Valor não pode ser nulo")
