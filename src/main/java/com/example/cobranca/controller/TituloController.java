@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.cobranca.model.StatusTitulo;
 import com.example.cobranca.model.Titulo;
-import com.example.cobranca.repository.Titulos;
+import com.example.cobranca.repository.TituloFilter;
 import com.example.cobranca.service.CadastroTituloService;
 
 @Controller
@@ -24,9 +25,6 @@ import com.example.cobranca.service.CadastroTituloService;
 public class TituloController {
 	
 	private static final String CADASTRO_VIEW = "CadastroTitulo";
-	
-	@Autowired
-	private Titulos titulos;
 	
 	@Autowired
 	private CadastroTituloService cadastroTituloService;
@@ -57,8 +55,9 @@ public class TituloController {
 	}
 	
 	@RequestMapping
-	public ModelAndView pesquiar() {
-		List<Titulo> todosTitulos = titulos.findAll();
+	public ModelAndView pesquiar(@ModelAttribute("filtro") TituloFilter filtro) {
+		List<Titulo> todosTitulos = cadastroTituloService.filtrar(filtro);
+		
 		ModelAndView mv = new ModelAndView("PesquisaTitulos");
 		mv.addObject("titulos", todosTitulos);
 		return mv;
@@ -79,9 +78,9 @@ public class TituloController {
 		return "redirect:/titulos";
 	}
 	
-	@RequestMapping(value= "????")
-	public void receber(Long codigo) {
-		
+	@RequestMapping(value= "/{codigo}/receber", method = RequestMethod.PUT)
+	public @ResponseBody String receber(@PathVariable Long codigo) {
+		return cadastroTituloService.receber(codigo);
 	}
 	
 	@ModelAttribute("todosStatusTitulo")
