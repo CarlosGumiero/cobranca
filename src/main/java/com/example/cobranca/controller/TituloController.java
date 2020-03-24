@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.cobranca.model.StatusTitulo;
 import com.example.cobranca.model.Titulo;
 import com.example.cobranca.repository.Titulos;
+import com.example.cobranca.service.CadastroTituloService;
 
 @Controller
 @RequestMapping("/titulos")
@@ -26,6 +27,9 @@ public class TituloController {
 	
 	@Autowired
 	private Titulos titulos;
+	
+	@Autowired
+	private CadastroTituloService cadastroTituloService;
 	
 	@RequestMapping("/novo")
 	public ModelAndView Novo() {
@@ -42,9 +46,14 @@ public class TituloController {
 			return CADASTRO_VIEW;
 		}
 		
-		titulos.save(titulo);
-		attributes.addFlashAttribute("mensagem","Titulo salvo com sucesso!");
-		return "redirect:/titulos";
+		try {
+			cadastroTituloService.salvar(titulo);
+			attributes.addFlashAttribute("mensagem","Titulo salvo com sucesso!");
+			return "redirect:/titulos";			
+		}catch(IllegalArgumentException e) {
+			errors.rejectValue("dataVencimento", null, e.getMessage());
+			return CADASTRO_VIEW;
+		}
 	}
 	
 	@RequestMapping
@@ -64,9 +73,15 @@ public class TituloController {
 	
 	@RequestMapping(value = "{codigo}", method = RequestMethod.POST)
 	public String excluir(@PathVariable Long codigo, RedirectAttributes attributes) {
-		titulos.deleteById(codigo);
+		cadastroTituloService.excluir(codigo);
+		
 		attributes.addFlashAttribute("mensagem","Titulo excluído com sucesso!");
 		return "redirect:/titulos";
+	}
+	
+	@RequestMapping(value= "????")
+	public void receber(Long codigo) {
+		
 	}
 	
 	@ModelAttribute("todosStatusTitulo")

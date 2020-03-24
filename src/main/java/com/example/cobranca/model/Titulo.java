@@ -11,12 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 public class Titulo {
@@ -36,6 +38,8 @@ public class Titulo {
 	
 	@NotNull(message = "Valor não pode ser nulo")
 	@DecimalMin(value = "0.01", message ="Valor deve ser maior que 0.00")
+	@DecimalMax(value = "9999999.99", message = "Valor não pode ser maior que 9.999.999,99")
+	@NumberFormat(pattern = "#,##0.00")
 	private BigDecimal valor;
 	
 	@Enumerated(EnumType.STRING)

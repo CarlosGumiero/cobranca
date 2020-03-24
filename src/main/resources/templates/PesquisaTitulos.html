@@ -41,9 +41,22 @@
 								th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}"></span>
 						</td>
 						<td class="text-center">
-							<a class="btn btn-link aw-link-card" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}"><i class="fas fa-edit"></i></a>
+							<a class="btn btn-link aw-link-card" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" 
+								title="Editar" rel="tooltip" data-placement="top">
+								<i class="fas fa-edit"></i>
+							</a>
+								
 							<a class="btn btn-link aw-link-card" data-toggle="modal" data-target="#confirmacaoExclusaoModal" 
-								th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"><i class="fas fa-trash-alt"></i></a>
+								th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"
+								title="Excluir" rel="tooltip" data-placement="top">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+							
+							<a class="btn btn-link aw-link-card js-atualizar-status" th:if="${titulo.pendente}"
+								title="Receber" rel="tooltip" data-placement="top"
+								th:ref="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}">
+								<i class="fas fa-check-circle"></i>
+							</a>
 							
 						</td>
 					</tr>
@@ -61,19 +74,3 @@
 	</section>
 	
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
